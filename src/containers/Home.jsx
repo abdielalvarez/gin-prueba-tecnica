@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Result from '../components/Result';
+import Binary from '../components/Binary';
 
 class Home extends Component {
 
@@ -38,7 +39,8 @@ class Home extends Component {
             // ESTE IF EXISTE POR LA INDICACIÓN DEL NÚMERO DEFAULT 1,000,000
             if (!this.state.palindromic || this.state.palindromic === []) {
                 const defaultNumber = '1000000'
-                const res = await fetch(`https://gin-backend.now.sh/result/${defaultNumber}`, options)
+                // const res = await fetch(`https://gin-backend.now.sh/result/${defaultNumber}`, options)
+                const res = await fetch(`http://localhost:3001/result/${defaultNumber}`, options)
                 const json = await res.text()
                 const data =  JSON.parse(json)
                 this.setState({
@@ -46,8 +48,8 @@ class Home extends Component {
                     results: data,
                 });
             } else {
-                const res = await fetch(`https://gin-backend.now.sh/result/${this.state.palindromic}`, options)
-                // const res = await fetch(`http://localhost:3001/result/${this.state.palindromic}`, options)
+                // const res = await fetch(`https://gin-backend.now.sh/result/${this.state.palindromic}`, options)
+                const res = await fetch(`http://localhost:3001/result/${this.state.palindromic}`, options)
                 const json = await res.text()
                 const data =  JSON.parse(json)
                 this.setState({
@@ -102,8 +104,8 @@ class Home extends Component {
                             </button>
                         </form>
                     </div>
-                    <div className="col-2">
-                        <h3>Result</h3>
+                    <div className="col-1">
+                        <h3>Decimals</h3>
                         {loading ?
                             <div className="spinner-border text-primary" role="status">
                                 <span className="sr-only">Loading...</span>
@@ -112,8 +114,19 @@ class Home extends Component {
                             (results.map((item, index) => {
                                 const { pal } = item;
                                 return <Result palindromic={pal} key={index} />
-                            }))
-                            }
+                            }))}
+                    </div>
+                    <div className="col-1">
+                        <h3>Binaries</h3>
+                        {loading ?
+                            <div className="spinner-border text-primary" role="status">
+                                <span className="sr-only">Loading...</span>
+                            </div> : error !== '' ? 
+                            <h3>{error}</h3> :
+                            (results.map((item, index) => {
+                                const { bin } = item;
+                                return <Binary binary={bin} key={index} />
+                            }))}
                     </div>
                     <div className="col-2">
                         <h3>Sum of palindromic values</h3>
