@@ -35,14 +35,26 @@ class Home extends Component {
                     'Content-Type': 'application/json',
                 }
             }
-            const res = await fetch(`https://gin-backend.now.sh/result/${this.state.palindromic}`, options)
-            // const res = await fetch(`http://localhost:3001/result/${this.state.palindromic}`, options)
-            const json = await res.text()
-            const data =  JSON.parse(json)
-            this.setState({
-                loading: false,
-                results: data,
-            });
+            // ESTE IF EXISTE POR LA INDICACIÓN DEL NÚMERO DEFAULT 1,000,000
+            if (!this.state.palindromic || this.state.palindromic === []) {
+                const defaultNumber = '1000000'
+                const res = await fetch(`https://gin-backend.now.sh/result/${defaultNumber}`, options)
+                const json = await res.text()
+                const data =  JSON.parse(json)
+                this.setState({
+                    loading: false,
+                    results: data,
+                });
+            } else {
+                const res = await fetch(`https://gin-backend.now.sh/result/${this.state.palindromic}`, options)
+                // const res = await fetch(`http://localhost:3001/result/${this.state.palindromic}`, options)
+                const json = await res.text()
+                const data =  JSON.parse(json)
+                this.setState({
+                    loading: false,
+                    results: data,
+                });
+            }
         } catch {
             this.setState({
                 error: 'Hubo un problema con tu servicio, Favor de intentarlo más tarde',
@@ -90,8 +102,8 @@ class Home extends Component {
                             </button>
                         </form>
                     </div>
-                    <div className="col-3">
-                        <h1>Result</h1>
+                    <div className="col-2">
+                        <h3>Result</h3>
                         {loading ?
                             <div className="spinner-border text-primary" role="status">
                                 <span className="sr-only">Loading...</span>
@@ -103,10 +115,18 @@ class Home extends Component {
                             }))
                             }
                     </div>
-                    <div className="col-3">
+                    <div className="col-2">
+                        <h3>Sum of palindromic values</h3>
                         {!results ?
                             null :
                             <h3>{this.total()}</h3>
+                        }
+                    </div>
+                    <div className="col-2">
+                        <h3>Sum of palindromic quantities</h3>
+                        {!results.length ?
+                            null :
+                            <h3>{results.length}</h3>
                         }
                     </div>
                 </div>
