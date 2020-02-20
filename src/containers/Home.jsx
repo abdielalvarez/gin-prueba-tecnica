@@ -9,6 +9,7 @@ class Home extends Component {
             palindromic: '',
             loading: false,
             results: [],
+            error: '',
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -26,20 +27,28 @@ class Home extends Component {
         this.setState({
             loading: true
         });
-        const options = {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+        try {
+            const options = {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                }
             }
+            const res = await fetch(`https://gin-backend.now.sh/result/${this.state.palindromic}`, options)
+            // const res = await fetch(`http://localhost:3001/result/${this.state.palindromic}`, options)
+            const json = await res.text()
+            const data =  JSON.parse(json)
+            this.setState({
+                loading: false,
+                results: data,
+            });
+        } catch {
+            this.setState({
+                error: 'Hubo un problema con tu servicio, Favor de intentarlo más tarde',
+                loading: false,
+            })
         }
-        const res = await fetch(`http://localhost:3001/result/${this.state.palindromic}`, options)
-        const json = await res.text()
-        const data =  JSON.parse(json)
-        this.setState({
-            loading: false,
-            results: data,
-        });
     }
 
     total = () => {
@@ -60,7 +69,7 @@ class Home extends Component {
     }
 
     render() {
-        const { results, loading } = this.state;
+        const { results, loading, error } = this.state;
         return (
             <div className='container'>
                 <div className="row">
@@ -86,7 +95,8 @@ class Home extends Component {
                         {loading ?
                             <div className="spinner-border text-primary" role="status">
                                 <span className="sr-only">Loading...</span>
-                            </div> :
+                            </div> : error !== '' ? 
+                            <h3>{error}</h3> :
                             (results.map((item, index) => {
                                 const { pal } = item;
                                 return <Result palindromic={pal} key={index} />
