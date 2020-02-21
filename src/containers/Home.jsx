@@ -42,7 +42,7 @@ class Home extends Component {
             // ESTE IF EXISTE POR LA INDICACIÓN DEL NÚMERO DEFAULT 1,000,000
             if (!this.state.palindromic || this.state.palindromic === []) {
                 const defaultNumber = '1000000'
-                const res = await fetch(`${process.env.REACT_APP_PRODUCTION_LINK}/result/${defaultNumber}`, options)
+                const res = await fetch(`https://gin-backend.now.sh/result/${defaultNumber}`, options)
                 const json = await res.text()
                 const data =  JSON.parse(json)
                 this.setState({
@@ -50,7 +50,7 @@ class Home extends Component {
                     results: data,
                 });
             } else {
-                const res = await fetch(`${process.env.REACT_APP_PRODUCTION_LINK}/result/${this.state.palindromic}`, options)
+                const res = await fetch(`https://gin-backend.now.sh/result/${this.state.palindromic}`, options)
                 const json = await res.text()
                 const data =  JSON.parse(json)
                 this.setState({

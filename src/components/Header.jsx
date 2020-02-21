@@ -55,7 +55,7 @@ class Header extends Component {
             body: JSON.stringify(this.state)
         }
         try {
-            const res = await fetch(`${process.env.REACT_APP_PRODUCTION_LINK}/api/auth/sign-up`, options)
+            const res = await fetch('https://gin-backend.now.sh/api/auth/sign-up', options)
             const json = await res.json()
             const str = JSON.stringify(json)
             localStorage.setItem('user', str)
@@ -79,7 +79,7 @@ class Header extends Component {
         e.preventDefault()
         delete this.state.signInIsOpen
         delete this.state.signUpIsOpen
-        this.state['apiKeyToken'] = process.env.REACT_APP_PUBLIC_API_KEY
+        this.state['apiKeyToken'] = '58479db83b67add9b3531ed78756128c8790c61b50b7fa00be7fd8c94b3ec330'
         const { email, password } = this.state;
         const token = Buffer.from(`${email}:${password}`, 'utf-8').toString('base64');
         const options = {
@@ -91,7 +91,7 @@ class Header extends Component {
             body: JSON.stringify(this.state),
         }
         try {
-            const res = await fetch(`${process.env.REACT_APP_PRODUCTION_LINK}/api/auth/sign-in`, options)
+            const res = await fetch('https://gin-backend.now.sh/api/auth/sign-in', options)
             const json = await res.json()
             const str = JSON.stringify(json)
             localStorage.setItem('user', str)
