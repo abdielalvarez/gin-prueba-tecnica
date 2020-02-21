@@ -112,8 +112,17 @@ class Home extends Component {
                     </div>
                     <div className='row home_row-3 mb-5'>
                         <div className='col-12 col-sm-12 col-lg-3'>
+                            {/* {loading ?
+                                <div className="spinner-border text-warning" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> :
+                                null
+                            } */}
                             {!results.length ?
-                                null :
+                                null : loading ? 
+                                <div className="spinner-border text-warning" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> :
                                 <>
                                     <h4 className='text-center'>Sum of decimal palindromics</h4>
                                     <h3 className='alert alert-info text-center'>{this.total()}</h3>
@@ -122,7 +131,10 @@ class Home extends Component {
                         </div>
                         <div className='col-12 col-sm-12 col-lg-3'>
                             {!results.length ?
-                                null :
+                                null : loading ?
+                                <div className="spinner-border text-warning" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> :
                                 <>
                                     <h4 className='text-center'>Sum of palindromic matches</h4>
                                     <h3 className='alert alert-info text-center'>{results.length}</h3>

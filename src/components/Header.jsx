@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component, Fragment } from 'react'
-import { Modal, ModalHeader, ModalBody } from 'reactstrap';
+import ModalSignUp from './ModalSignUp';
+import ModalSignIn from './ModalSignIn';
 import Swal from 'sweetalert2';
 import '../assets/styles/components/Header.scss';
 
@@ -13,6 +14,7 @@ class Header extends Component {
             signInIsOpen: false,
             email: '',
             password: '',
+            samePassword: '',
         }
         this.toggleSignIn = this.toggleSignIn.bind(this);
         this.toggleSignUp = this.toggleSignUp.bind(this);
@@ -46,6 +48,14 @@ class Header extends Component {
         e.preventDefault()
         delete this.state.signInIsOpen
         delete this.state.signUpIsOpen
+        if (this.state.password !== this.state.samePassword) {
+            await Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Password should be the same in both cases!',
+            })
+            window.location.reload()
+        }
         const options = {
             method: 'POST',
             headers: {
@@ -138,86 +148,21 @@ class Header extends Component {
                     }
                 </ul>
                 
-                <Modal isOpen={this.state.signUpIsOpen} toggle={this.toggleSignUp}>
-                    <ModalHeader toggle={this.toggleSignUp}>
-                        <div className='container'>
-                            <h3>Sign Up</h3>
-                            <small className='text-muted'>Give us your email and password for signing up</small>
-                        </div>
-                    </ModalHeader>
-                    <ModalBody>
-                        <div className='container'>
-                            <form onSubmit={this.handleSignUp}>
-                                <div className='form-group'>
-                                    <input 
-                                        type='email'
-                                        name='email'
-                                        className='form-control mb-2'
-                                        placeholder='Email'
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                    <small id='emailHelp' className='form-text text-muted'>We'll never share your email with anyone else.</small>
-                                    <input
-                                        type='password'
-                                        name='password'
-                                        className='form-control'
-                                        placeholder='Password'
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <small id='link-sign-up' className='form-text text-muted mb-3'>
-                                    ¿Do you already have an account?
-                                    <a href='#' onClick={this.toggleSignIn} className='ml-2'>
-                                        Sign in here
-                                    </a>
-                                </small>
-                                <button type='submit' className='btn btn-primary'>Sign Up</button>
-                            </form>
-                        </div>
-                    </ModalBody>
-                </Modal>
+                <ModalSignUp 
+                    signUpIsOpen={this.state.signUpIsOpen}
+                    toggleSignUp={this.toggleSignUp}
+                    handleSignUp={this.handleSignUp}
+                    handleChange={this.handleChange}
+                    toggleSignIn={this.toggleSignIn}
+                />
 
-                <Modal isOpen={this.state.signInIsOpen} toggle={this.toggleSignIn}>
-                    <ModalHeader toggle={this.toggleSignIn}>
-                        <div className='container'>
-                            <h3>Sign In</h3>
-                            <small className='text-muted'>Give us your email and password for signing in</small>
-                        </div>
-                    </ModalHeader>
-                    <ModalBody>
-                        <div className='container'>
-                            <form onSubmit={this.handleSignIn}>
-                                <div className='form-group'>
-                                    <input 
-                                        type='email'
-                                        name='email'
-                                        className='form-control mb-2'
-                                        placeholder='Email'
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                    <input
-                                        type='password'
-                                        name='password'
-                                        className='form-control'
-                                        placeholder='Password'
-                                        onChange={this.handleChange}
-                                        required
-                                    />
-                                </div>
-                                <small id='link-sign-up' className='form-text text-muted mb-3'>
-                                    ¿Don't you have an account already?
-                                    <a href='#' onClick={this.toggleSignUp} className='ml-2'>
-                                        Sign up here
-                                    </a>
-                                </small>
-                                <button type='submit' className='btn btn-primary'>Sign In</button>
-                            </form>
-                        </div>
-                    </ModalBody>
-                </Modal>
+                <ModalSignIn 
+                    signInIsOpen={this.state.signInIsOpen}
+                    toggleSignIn={this.toggleSignIn}
+                    handleSignIn={this.handleSignIn}
+                    handleChange={this.handleChange}
+                    toggleSignUp={this.toggleSignUp}
+                />
 
             </Fragment>
         )
