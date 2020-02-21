@@ -1,6 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Result from '../components/Result';
 import Binary from '../components/Binary';
+import Footer from '../components/Footer';
+import Header from '../components/Header';
+import '../assets/styles/containers/Home.scss';
 
 class Home extends Component {
 
@@ -39,8 +42,7 @@ class Home extends Component {
             // ESTE IF EXISTE POR LA INDICACIÓN DEL NÚMERO DEFAULT 1,000,000
             if (!this.state.palindromic || this.state.palindromic === []) {
                 const defaultNumber = '1000000'
-                // const res = await fetch(`https://gin-backend.now.sh/result/${defaultNumber}`, options)
-                const res = await fetch(`http://localhost:3001/result/${defaultNumber}`, options)
+                const res = await fetch(`${process.env.REACT_APP_DEVELOPMENT_LINK}/result/${defaultNumber}`, options)
                 const json = await res.text()
                 const data =  JSON.parse(json)
                 this.setState({
@@ -48,8 +50,7 @@ class Home extends Component {
                     results: data,
                 });
             } else {
-                // const res = await fetch(`https://gin-backend.now.sh/result/${this.state.palindromic}`, options)
-                const res = await fetch(`http://localhost:3001/result/${this.state.palindromic}`, options)
+                const res = await fetch(`${process.env.REACT_APP_DEVELOPMENT_LINK}/result/${this.state.palindromic}`, options)
                 const json = await res.text()
                 const data =  JSON.parse(json)
                 this.setState({
@@ -85,65 +86,83 @@ class Home extends Component {
     render() {
         const { results, loading, error } = this.state;
         return (
-            <div className='container'>
-                <div className="row">
-                    <h1>Define your superior limit to know palindromic numbers</h1>
-                </div>
-                <div className="row">
-                    <div className="col-6">
-                        <form onSubmit={this.handleSubmit}>
+            <Fragment>
+                <Header />
+                <div className='container home_container'>
+                    <div className='row home_row-1 text-center mt-3 mb-3'>
+                        <h1 className=''>Define your superior limit to know palindromic decimal and binaries</h1>
+                        <small>App made by Abdiel Álvarez</small>
+                    </div>
+                    <div className='row home_row-2 mb-5'>
+                        <form onSubmit={this.handleSubmit} className='home_form'>
                             <input
                                 type='text'
+                                className='form-control home_input'
                                 name='palindromic'
+                                placeholder='Write a limit'
                                 onChange={this.handleChange}
                             />
                             <button 
                                 type='submit'
+                                className='btn btn-warning home_button'
                             >
-                            Know how many palindromics can give you this limit
+                            Show palindromics
                             </button>
                         </form>
                     </div>
-                    <div className="col-1">
-                        <h3>Decimals</h3>
-                        {loading ?
-                            <div className="spinner-border text-primary" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div> : error !== '' ? 
-                            <h3>{error}</h3> :
-                            (results.map((item, index) => {
-                                const { pal } = item;
-                                return <Result palindromic={pal} key={index} />
-                            }))}
-                    </div>
-                    <div className="col-1">
-                        <h3>Binaries</h3>
-                        {loading ?
-                            <div className="spinner-border text-primary" role="status">
-                                <span className="sr-only">Loading...</span>
-                            </div> : error !== '' ? 
-                            <h3>{error}</h3> :
-                            (results.map((item, index) => {
-                                const { bin } = item;
-                                return <Binary binary={bin} key={index} />
-                            }))}
-                    </div>
-                    <div className="col-2">
-                        <h3>Sum of palindromic values</h3>
-                        {!results ?
-                            null :
-                            <h3>{this.total()}</h3>
-                        }
-                    </div>
-                    <div className="col-2">
-                        <h3>Sum of palindromic quantities</h3>
-                        {!results.length ?
-                            null :
-                            <h3>{results.length}</h3>
-                        }
+                    <div className='row home_row-3 mb-5'>
+                        <div className='col-12 col-sm-12 col-lg-3'>
+                            {!results.length ?
+                                null :
+                                <>
+                                    <h4 className='text-center'>Sum of decimal palindromics</h4>
+                                    <h3 className='alert alert-info text-center'>{this.total()}</h3>
+                                </>
+                            }
+                        </div>
+                        <div className='col-12 col-sm-12 col-lg-3'>
+                            {!results.length ?
+                                null :
+                                <>
+                                    <h4 className='text-center'>Sum of palindromic matches</h4>
+                                    <h3 className='alert alert-info text-center'>{results.length}</h3>
+                                </>
+                            }
+                        </div>
+                        <div className='col-12 col-sm-6 col-lg-3 mb-3'>
+                            {!results.length ?
+                                null :
+                                <h4 className='text-center'>Decimals</h4>
+                            }
+                            {loading ?
+                                <div className="spinner-border text-warning" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> : error !== '' ? 
+                                <h3>{error}</h3> :
+                                (results.map((item, index) => {
+                                    const { pal } = item;
+                                    return <Result palindromic={pal} key={index} />
+                                }))}
+                        </div>
+                        <div className='col-12 col-sm-6 col-lg-3'>
+                            {!results.length ?
+                                null :
+                                <h4 className='text-center'>Binaries</h4>
+                            }
+                            {loading ?
+                                <div className="spinner-border text-warning" role="status">
+                                    <span className="sr-only">Loading...</span>
+                                </div> : error !== '' ? 
+                                <h3>{error}</h3> :
+                                (results.map((item, index) => {
+                                    const { bin } = item;
+                                    return <Binary binary={bin} key={index} />
+                                }))}
+                        </div>
                     </div>
                 </div>
-            </div>
+                <Footer />
+            </Fragment>
         )
     }
 }
