@@ -55,7 +55,7 @@ class Header extends Component {
             body: JSON.stringify(this.state)
         }
         try {
-            const res = await fetch(`${process.env.REACT_APP_DEVELOPMENT_LINK}/api/auth/sign-up`, options)
+            const res = await fetch(`${process.env.REACT_APP_PRODUCTION_LINK}/api/auth/sign-up`, options)
             const json = await res.json()
             const str = JSON.stringify(json)
             localStorage.setItem('user', str)
@@ -91,7 +91,7 @@ class Header extends Component {
             body: JSON.stringify(this.state),
         }
         try {
-            const res = await fetch(`${process.env.REACT_APP_DEVELOPMENT_LINK}/api/auth/sign-in`, options)
+            const res = await fetch(`${process.env.REACT_APP_PRODUCTION_LINK}/api/auth/sign-in`, options)
             const json = await res.json()
             const str = JSON.stringify(json)
             localStorage.setItem('user', str)

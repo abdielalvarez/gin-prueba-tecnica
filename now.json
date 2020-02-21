@@ -10,5 +10,10 @@
             } 
         }
     ],
-    "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }]
+    "routes": [{ "src": "/(.*)", "dest": "/src/index.js" }],
+    "env": {
+        "REACT_APP_PUBLIC_API_KEY": "@reactapppublicapikey",
+        "REACT_APP_DEVELOPMENT_LINK": "@reactappdevelopmentlink",
+        "REACT_APP_PRODUCTION_LINK": "@reactappproductionlink"
+    }
 }
